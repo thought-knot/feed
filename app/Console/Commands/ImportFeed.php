@@ -35,7 +35,7 @@ class ImportFeed extends Command
         'strProductCode.unique' => "Product Code must be unique in Products Table",
         'strProductCode.required' => "Product Name is required",
         'strProductDesc.required' => "Product Description is required",
-        'intStock.require' => 'Stock Level is required',
+        'intStock.required' => 'Stock Level is required',
         'intStock.integer' => 'Stock Level must be an integer',
         'intStock.stock_level' => 'Stock Level must be greater than 10 to import with a cost lower than £5',
         'decCost.required' => "Cost is required",
