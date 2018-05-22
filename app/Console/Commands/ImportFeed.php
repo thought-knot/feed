@@ -44,7 +44,7 @@ class ImportFeed extends Command
         'blnDiscontinued.in' => "Discontinued can only be 'yes','no' or empty"
     ];
 
-    protected $signature = 'import:feed {feed_csv}';
+    protected $signature = 'import:feed {feed_csv} {--test}';
 
     protected $description = 'Import a feed in the agreed format';
 
@@ -129,16 +129,23 @@ class ImportFeed extends Command
                     $new_product = new Product($import_product);
                     $new_product->blnDiscontinued = $new_product->blnDiscontinued == 'yes' ? 1 : 0;
                     $new_product->dtmDiscontinued = $new_product->blnDiscontinued == 1 ? date('Y-m-d H:i:s') : null;
-                    $new_product->save();
+                    if (!$this->option('test')) {
+                        // If not running in test mode save the products
+                        $new_product->save();
+                    }
 
                     $this->products_imported++;
                 }
             }
 
-            $this->info($this->products_imported."/".$this->products_to_import." products imported");
+            if ($this->option('test')) {
+                $this->info("Running In Test Mode: ".$this->products_imported."/".$this->products_to_import." products would have been imported");
+            } else {
+                $this->info($this->products_imported."/".$this->products_to_import." products imported");
+            }
 
             if (count($this->errors) > 0) {
-                $this->info('Errors:');
+                $this->info("\n\nErrors:");
                 foreach ($this->errors as $error) {
                     $this->info($error);
                 }
